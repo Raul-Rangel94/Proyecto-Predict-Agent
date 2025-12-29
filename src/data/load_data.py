@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
-REQUIRED_COLUMNS = ["home_team", "away_team", "date",
+REQUIRED_COLUMNS = ["match_id","home_team", "away_team", "date",
                      "result"]
 
 def load_matches(file_path: str) -> pd.DataFrame:
@@ -27,4 +27,5 @@ def load_matches(file_path: str) -> pd.DataFrame:
     missing_columns = set(REQUIRED_COLUMNS) - set(df.columns)
     if missing_columns:
         raise ValueError(f"Missing required columns: {missing_columns}")
+
     return df
