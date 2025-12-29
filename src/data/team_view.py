@@ -6,6 +6,7 @@ def build_team_view(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     home = pd.DataFrame({
+        "match_id": df["match_id"],
         "date": df["date"],
         "team": df["home_team"],
         "goals_for": df["home_goals"],
@@ -14,6 +15,7 @@ def build_team_view(df: pd.DataFrame) -> pd.DataFrame:
     })
 
     away = pd.DataFrame({
+        "match_id": df["match_id"],
         "date": df["date"],
         "team": df["away_team"],
         "goals_for": df["away_goals"],
@@ -24,5 +26,6 @@ def build_team_view(df: pd.DataFrame) -> pd.DataFrame:
     team_df = pd.concat([home, away], ignore_index=True)
 
     team_df = team_df.sort_values(["team", "date"]).reset_index(drop=True)
+
 
     return team_df
