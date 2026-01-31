@@ -1,49 +1,48 @@
 # Probabilistic Football Modeling Pipeline (Liga MX)
 
-This project focuses on building a **robust and interpretable data pipeline** for probabilistic football modeling using Liga MX match data.
+This project focuses on building a **robust, interpretable, and football-aware data pipeline** for probabilistic modeling using Liga MX match data.
 
-The objective is **not** to predict exact scores, but to design a clean, reusable, and football-aware dataset that can support **probabilistic analysis and decision-making**.
+Rather than predicting exact scores or deterministic outcomes, the goal is to design a **clean and reusable pre-match dataset** that supports **probability estimation, calibration analysis, and decision-making under uncertainty**.
 
 ---
 
 ## 🎯 Project Goals
 
-- Build a structured **pre-match data pipeline**
-- Design football-informed features (form, momentum, relative strength)
-- Ensure data consistency and interpretability
+- Build a structured and reproducible **pre-match data pipeline**
+- Design **football-informed features** (form, momentum, relative strength)
+- Ensure **data consistency, interpretability, and temporal correctness**
 - Produce datasets suitable for **probabilistic models**, not just point predictions
-
-Models are treated as **downstream consumers** of the data pipeline.
+- Treat models as **downstream consumers** of the data pipeline
 
 ---
 
-## ⚙️ Current Scope
+## ⚙️ Scope & Data
 
-- **Competition:** Liga MX  
-- **Season:** Clausura 2024  
-- **Granularity:** One record per match (home vs away)  
-- **Time window:** Last 5 matches (rolling)
+- Competition: Liga MX  
+- Granularity: One record per match (home vs away)  
+- Temporal structure: Rolling pre-match windows  
+- Feature computation strictly respects **pre-match availability**
 
-Using a single season helps reduce structural noise caused by major changes in squads, coaches, and context.
+While some exploratory steps focus on controlled seasonal subsets, the pipeline and evaluation strategy are designed to support **multi-season, temporally consistent modeling**.
 
 ---
 
 ## 🧠 Feature Engineering (Pre-Match)
 
-Each match is represented with separate features for home and away teams:
+Each match is represented using separate features for home and away teams:
 
-- `home_form`, `away_form`  
+- `home_form`, `away_form`
 - `home_momentum`, `away_momentum`
 
 Relative features are also included:
 
-- `form_diff`  
+- `form_diff`
 - `momentum_diff`
 
 **Form** captures recent performance level, while  
-**Momentum** captures the direction of recent performance (trend).
+**Momentum** captures the direction and trend of that performance.
 
-All features are computed strictly using **pre-match information**.
+All features are computed using **only information available before kickoff**, preventing leakage.
 
 ---
 
@@ -54,7 +53,8 @@ Current target:
 - `home_win = 1` → home team wins  
 - `home_win = 0` → draw or away win  
 
-This setup is intentionally simple and scalable to:
+This binary setup is intentionally simple and extensible to:
+
 - multi-class outcomes (W / D / L)
 - goal-based probabilistic models
 - Bayesian or hierarchical approaches
@@ -63,26 +63,29 @@ This setup is intentionally simple and scalable to:
 
 ## 📊 Modeling Philosophy
 
-Football is a high-variance sport.  
-Predicting exact results is neither realistic nor professional.
+Football is a **high-variance, low-signal sport**.
 
-This project focuses on:
-- **probability estimation**
-- **calibration and reliability**
-- **zone-based and ranking-based interpretations**
+Predicting exact outcomes is neither realistic nor informative.
+
+This project prioritizes:
+
+- probability estimation
+- calibration and reliability
+- ranking-based and zone-based interpretation
 
 Accuracy alone is not treated as a sufficient metric.
 
 ---
 
-## 🔬 Validation & Analysis
+## 🔬 Validation & Evaluation
 
-Features and model outputs are validated through:
-- distribution analysis
-- sanity checks with football logic
-- probability bins and reliability curves
+Model outputs are evaluated using:
 
-This ensures the model’s probabilities are **meaningful**, not just numerically correct.
+- temporal cross-validation (expanding window)
+- probabilistic metrics (log loss, Brier score)
+- reliability curves and probability buckets
+
+The full evaluation process and technical reasoning are documented in the **notebooks folder**, which serves as a traceable record of modeling decisions.
 
 ---
 
@@ -91,17 +94,16 @@ This ensures the model’s probabilities are **meaningful**, not just numericall
 Work in progress.
 
 Current focus areas:
-- feature validation and robustness
-- probability calibration
-- zone-based interpretation of predictions
+
+- feature robustness and signal validation
+- probabilistic calibration analysis
+- identification of reliable vs unreliable prediction zones
 
 ---
 
 ## 🔜 Next Steps
 
-- Compare probabilistic models (logistic regression, trees, SVM)
-- Extend to multi-output modeling:
-  - match outcome probability
-  - match intensity (active vs low-tempo games)
-- Introduce historical and contextual adjustments
+- Targeted feature engineering to improve mid-probability regions
+- Model comparison under a fixed evaluation protocol
+- Extension toward richer probabilistic outputs
 
